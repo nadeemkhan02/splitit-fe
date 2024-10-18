@@ -1,0 +1,46 @@
+.MuiOutlinedInput-root {
+    height: var(--input-height);
+    font-family: var(--font-family) !important;
+    font-weight: var(--font-weight-normal);
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+    border-radius: var(--border-radius);
+}
+
+.MuiInputLabel-root {
+    font-family: var(--font-family) !important;
+    font-weight: var(--font-weight-normal);
+    font-size: var(--font-size);
+    margin-bottom: 6px !important;
+}
+
+
+.MuiOutlinedInput-root fieldset {
+    border: 1px solid var(--primary-color);
+    border-radius: var(--border-radius);
+}
+
+.MuiOutlinedInput-root.Mui-focused fieldset,
+.MuiOutlinedInput-root:hover fieldset {
+    border: 1px solid var(--primary-color) !important;
+    box-shadow: none;
+}
+
+.MuiOutlinedInput-root input:-webkit-autofill {
+    transition-delay: 9999s;
+    transition-property: background-color, color;
+}
+
+.MuiOutlinedInput-root::placeholder {
+    opacity: 0.5;
+}
+
+.MuiFormHelperText-root {
+    margin: 0;
+    font-family: var(--helper-font-family);
+    margin-left: 0px !important;
+}
+
+.MuiOutlinedInput-root.Mui-error fieldset {
+    border: 1px solid var(--error-color) !important;
+}

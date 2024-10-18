@@ -1,0 +1,77 @@
+.toast-success>p,
+.toast-error>p {
+  font-family: Poppins, Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 20px;
+  margin: 0px;
+}
+
+.toast-success>p {
+  color: #000000 !important;
+}
+
+.toast-error>p {
+  color: #ff2b2b !important;
+}
+
+.Toastify__toast-icon {
+  display: none !important;
+}
+
+.Toastify__toast {
+  width: 366px !important;
+  /* Set the width of the toast */
+  max-width: 90vw;
+  /* Ensure it does not exceed the screen width */
+  margin: 0 auto;
+  /* Center the toast horizontally */
+  right: auto !important;
+  /* Remove right alignment */
+}
+
+.display-flex {
+  display: flex;
+  align-items: center;
+}
+
+.Toastify__close-button--light {
+  color: black !important;
+  opacity: 1 !important;
+  align-self: center !important;
+  margin: 0px 10px !important;
+  line-height: 0px !important;
+  width: 14px !important;
+}
+
+.toast-heading {
+  font-weight: bold !important;
+}
+
+.success-toast-heading,
+.error-toast-heading {
+  display: none !important;
+}
+
+/* Center the toast container */
+.Toastify__toast-container {
+  left: 50% !important;
+  /* Center the container */
+  transform: translateX(-50%) !important;
+  /* Center adjustment */
+  padding: 0 !important;
+  /* No padding */
+}
+
+/* Media query for mobile devices */
+@media only screen and (max-width: 480px) {
+  .Toastify__toast {
+    width: 90vw !important;
+    /* Adjust width for mobile */
+  }
+
+  .Toastify__toast-container {
+    width: 100vw;
+    /* Full width for container */
+  }
+}

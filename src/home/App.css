@@ -1,0 +1,74 @@
+/* App.css */
+* {
+    box-sizing: border-box;
+    /* Include padding and border in width/height calculations */
+}
+
+body {
+    margin: 0 !important;
+    /* No margin for body */
+    padding: 0 !important;
+    /* No padding for body */
+    height: 100vh;
+    /* Full viewport height */
+    background-color: #f0f0f0;
+    /* Background color of the body */
+    display: flex;
+    /* Use flexbox for layout */
+    justify-content: center;
+    font-family: "Poppins", sans-serif !important;
+    /* overflow: auto; */
+    /* Allow scrolling if content exceeds body height */
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    min-width: 500px;
+    height: 100vh;
+    background-color: #ffffff;
+    padding: 0px;
+    margin: 0;
+    overflow-y: auto;
+}
+
+/* Hide scrollbar for WebKit browsers */
+.container::-webkit-scrollbar {
+    display: none;
+    /* Hide scrollbar */
+}
+
+/* Hide scrollbar for Firefox */
+.container {
+    scrollbar-width: none;
+    /* Hide scrollbar */
+}
+
+/* Add styles for internal components */
+h1,
+p {
+    margin: 0;
+    /* Remove default margin from headings and paragraphs */
+}
+
+/* Optional: Add some styling for mobile responsiveness */
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        /* Use 90% width on smaller screens */
+        min-width: 100vw;
+        /* Maintain minimum width for usability */
+    }
+}
+
+:root {
+    --primary-color: #1876D1;
+    --error-color: #d32f2f;
+    --font-family: 'Poppins', sans-serif;
+    --helper-font-family: 'Lato', sans-serif;
+    --border-radius: 4px;
+    --input-height: 30px;
+    --font-weight-normal: 400;
+    --font-size: 15px;
+    --line-height: 24px;
+}
