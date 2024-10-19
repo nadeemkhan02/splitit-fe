@@ -1,3 +1,5 @@
+import { text } from 'framer-motion/client'
+
 const colors = {
   primary: '#1876D1',
   primaryLight: '#8BBAE7',
@@ -27,6 +29,9 @@ const colors = {
   dangerLight: '#f8d7da',
   info: '#17a2b8',
   infoLight: '#d1ecf1',
+  black: '#000000',
+  textColor1: '#efc020',
+  textColor2: '#12bf6d',
 }
 
 export default colors

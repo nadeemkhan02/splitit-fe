@@ -1,13 +1,35 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import LeftPartImage from '../../assets/images/leftPartBill.png'
-import RightPartImage from '../../assets/images/rightPartBill.png'
+import LeftPartImage from '../../assets/images/animationImgLeft.png'
+import RightPartImage from '../../assets/images/animationImgRight.png'
 import NavBar from '../../components/NavBar'
 import { Box, Typography } from '@mui/material'
 import colors from '../../constants/colors'
+import { useNavigate } from 'react-router-dom'
+import CustomButton from '../../common/CustomButton'
+import { ROUTE_PATH } from '../../utils/routes'
 
 const Home = () => {
   const splitText = 'Split It'.split('')
+  const navigate = useNavigate()
+
+  const featuresList = [
+    {
+      title: 'Trip Planning',
+      featureDescription:
+        'Log individual expenses, categorize them (food, transportation, activities) for clarity.',
+    },
+    {
+      title: 'Expense Tracking',
+      featureDescription:
+        'Create and customize itineraries with destinations, dates, travel modes, and accommodation choices.',
+    },
+    {
+      title: 'Split Payments',
+      featureDescription:
+        'Fairly distribute costs among group members with customizable payment options: equal split, percentage-based, or specific amounts.',
+    },
+  ]
 
   return (
     <Box>
@@ -15,23 +37,23 @@ const Home = () => {
       <NavBar />
       <Box sx={{ p: 1 }}>
         {/* descriptipion text */}
-        <Box>
+        <Box sx={{ mb: '20px' }}>
           <Typography
             sx={{
-              fontSize: '1.6rem',
-              m: '1rem 0',
-              textAlign: 'center',
-              color: '#4a4a4a',
-              p: '20px 6px',
+              fontSize: '1.5rem',
+              textAlign: 'left',
+              color: colors.black,
+              p: '30px 6px',
               fontFamily: 'Poppins',
+              fontWeight: '300',
             }}>
-            SplitIt is a comprehensive app designed to simplify group trip
-            planning and expense management, making travel hassle-free and
-            enjoyable.
+            <span style={{ color: colors.primary }}>A comprehensive app</span>{' '}
+            designed to simplify group trip planning and expense management,
+            making travel hassle-free and enjoyable
           </Typography>
         </Box>
         {/* Motion Images */}
-        <Box>
+        <Box sx={{ mb: '50px' }}>
           <Box
             style={{
               position: 'relative',
@@ -46,7 +68,7 @@ const Home = () => {
               alt="Split Bill"
               style={{
                 position: 'absolute',
-                top: 0,
+                top: '-8px',
                 left: 4,
                 width: '74%',
                 height: '100%',
@@ -72,11 +94,12 @@ const Home = () => {
               }}>
               {/* Split It Animated Text */}
               <Box
-                style={{
+                sx={{
                   display: 'flex',
                   justifyContent: 'center',
                   fontSize: '2.7rem',
                   fontWeight: 'bold',
+                  mt: '-14px',
                 }}>
                 {splitText.map((char, index) => (
                   <motion.span
@@ -107,24 +130,29 @@ const Home = () => {
                   fontSize: '1rem',
                   color: '#4a4a4a',
                   textAlign: 'center',
-                  marginTop: '-2px',
+                  lineHeight: '32px',
                 }}>
                 <p
                   style={{
                     fontSize: '1.2rem',
                     color: '#4a4a4a',
                     textAlign: 'center',
-                    marginTop: '2px',
-                    fontWeight: '300',
+                    fontWeight: '350',
+                    lineHeight: '30px',
                   }}>
-                  <span style={{ color: colors.primary }}>Get Started!</span>
+                  <span
+                    style={{ color: colors.primary, cursor: 'pointer' }}
+                    onClick={(e) => {
+                      console.log('clicked')
+                    }}>
+                    Get Started!
+                  </span>
                   <br /> It’s{' '}
                   <span style={{ color: colors.darkBlue }}>Free</span>, Its{' '}
                   <span style={{ color: colors.darkBlue }}>Easy</span>
                 </p>
               </motion.p>
             </Box>
-
             {/* Right Half */}
             <motion.img
               src={RightPartImage}
@@ -145,6 +173,83 @@ const Home = () => {
             />
           </Box>
         </Box>
+
+        {/* features list */}
+        <Box>
+          {/* Features Heading */}
+          {/* <Typography
+            sx={{
+              color: 'primary.main',
+              fontWeight: '400',
+              marginBottom: '14px',
+              textAlign: 'left',
+              fontFamily: 'Poppins, sans-serif',
+              fontSize: '26px',
+            }}>
+            Features:
+          </Typography> */}
+          {featuresList.map((item, index) => (
+            <Box
+              key={index}
+              sx={{
+                marginBottom: '20px',
+                padding: '10px 20px',
+                background: `linear-gradient(to ${
+                  index % 2 === 0 ? 'right' : 'left'
+                }, ${colors.primaryLight} 40%, rgba(0, 0, 0, 0) 100%)`, // Smooth fade to transparent
+                height: '150px',
+              }}>
+              <Typography
+                sx={{
+                  textAlign: 'left',
+                  marginBottom: '6px',
+                  fontWeight: '400',
+                  fontFamily: 'Poppins, sans-serif',
+                  fontSize: '20px',
+                }}>
+                {item.title}
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  textAlign: 'left',
+                  color: 'text.secondary',
+                  fontFamily: 'Poppins, sans-serif',
+                }}>
+                {item.featureDescription}
+              </Typography>
+            </Box>
+          ))}
+          {/* Feature Block */}
+        </Box>
+      </Box>
+
+      {/* footer section */}
+      <Box
+        sx={{
+          backgroundColor: colors.mistBlue,
+          height: '58px',
+          position: 'sticky',
+          borderRadius: '12px 12px 0px 0px',
+          bottom: 0,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <CustomButton
+          handleClick={() => {
+            navigate(ROUTE_PATH.SIGN_UP)
+          }}
+          // isLoading={true}
+          ButtonContainerStyle={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+          sx={{ width: '80%' }}
+          text={"Let's plan your trip"}
+          loadinButtonWidth={'50px'}
+        />
       </Box>
     </Box>
   )

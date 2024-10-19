@@ -21,9 +21,10 @@ const CustomButton = ({
   sx,
   name,
   loadinButtonWidth,
+  ButtonContainerStyle,
 }) => {
   return (
-    <div>
+    <div style={{ ...ButtonContainerStyle }}>
       <Button
         aria-label={text}
         ref={innerRef}

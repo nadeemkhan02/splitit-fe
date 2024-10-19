@@ -30,6 +30,7 @@ body {
     padding: 0px;
     margin: 0;
     overflow-y: auto;
+    scroll-behavior: smooth;
 }
 
 /* Hide scrollbar for WebKit browsers */
