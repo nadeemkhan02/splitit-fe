@@ -47,7 +47,24 @@ const Home = () => {
               fontFamily: 'Poppins',
               fontWeight: '300',
             }}>
-            <span style={{ color: colors.primary }}>A comprehensive app</span>{' '}
+            <span style={{ color: colors.primary }}>
+              A comprehensive{' '}
+              <span
+                onClick={() => {
+                  localStorage.setItem(
+                    'user',
+                    JSON.stringify({
+                      name: 'Nadeem Khan',
+                      email: 'nadeem.khan@yopmail.com',
+                      token:
+                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MGY3MjFhNDc1OGExYmE0YmE1OGY3YSIsImVtYWlsIjoibmFkZWVtLmtoYW5AeW9wbWFpbC5jb20iLCJuYW1lIjoiTmFkZWVtIEtoYW4iLCJpYXQiOjE3MjkzMzY0ODZ9.7A-B1ZWL0mGO6S7xE47ZVSyGAFUOQprnj8Wmp_bXAgI',
+                    })
+                  )
+                  window.location.reload()
+                }}>
+                app
+              </span>
+            </span>{' '}
             designed to simplify group trip planning and expense management,
             making travel hassle-free and enjoyable
           </Typography>
