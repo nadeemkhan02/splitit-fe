@@ -19,7 +19,7 @@ const SignUp = () => {
     isValidEmail: true,
     isValidPassword: true,
     isValidConfirmPassword: true,
-    isValidForm: true,
+    isValidForm: false,
   })
   const validateForm = (formDetails) => {
     if (

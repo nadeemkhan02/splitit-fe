@@ -228,10 +228,12 @@ const Home = () => {
       <Box
         sx={{
           backgroundColor: colors.mistBlue,
-          height: '58px',
+          height: '66px',
           position: 'sticky',
-          borderRadius: '12px 12px 0px 0px',
-          bottom: 0,
+          // Fix the footer at the bottom
+          borderRadius: '16px 16px 0px 0px',
+          bottom: 0, // Ensure it's aligned to the bottom
+          width: '100%', // Make sure it spans the entire width
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -244,6 +246,7 @@ const Home = () => {
           ButtonContainerStyle={{
             width: '100%',
             display: 'flex',
+            height: '38px',
             justifyContent: 'center',
           }}
           sx={{ width: '80%' }}

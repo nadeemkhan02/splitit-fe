@@ -5,6 +5,9 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import SignIn from '../pages/SignIn'
 import SignUp from '../pages/SignUp'
 import Dashboard from '../pages/Dashboard'
+import Trips from '../pages/Trips'
+import Friends from '../pages/Friends'
+import History from '../pages/History'
 
 const App = () => {
   const isLogedIn = localStorage.getItem('user')
@@ -18,6 +21,9 @@ const App = () => {
             element={<Navigate replace to={ROUTE_PATH.DASHBOARD} />}
           />
           <Route path={ROUTE_PATH.DASHBOARD} element={<Dashboard />} />
+          <Route path={ROUTE_PATH.TRIPS} element={<Trips />} />
+          <Route path={ROUTE_PATH.FRIENDS} element={<Friends />} />
+          <Route path={ROUTE_PATH.HISTORY} element={<History />} />
         </Routes>
       ) : (
         <Routes>

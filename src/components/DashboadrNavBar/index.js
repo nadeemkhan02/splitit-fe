@@ -2,7 +2,6 @@ import * as React from 'react'
 import {
   AppBar,
   Box,
-  Toolbar,
   IconButton,
   Typography,
   Menu,
@@ -13,10 +12,14 @@ import {
 } from '@mui/material'
 import colors from '../../constants/colors'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+import { ROUTE_PATH } from '../../utils/routes'
+import Logo from '../../assets/logo/mainLogo.png'
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
-function DashboardNavBar() {
+const DashboardNavBar = () => {
+  const navigate = useNavigate()
   const [anchorElUser, setAnchorElUser] = React.useState(null)
 
   const handleOpenUserMenu = (event) => {
@@ -82,19 +85,27 @@ function DashboardNavBar() {
           padding: '10px 15px',
         }}>
         {/* Left side LOGO */}
-        <Typography
-          variant="h6"
-          noWrap
-          sx={{
-            mr: 2,
-            fontFamily: 'Poppins',
-            fontWeight: 400,
-            color: 'inherit',
-            textDecoration: 'none',
-            fontSize: '26px',
+        <Box
+          sx={{ display: 'flex', alignItems: 'center' }}
+          onClick={() => {
+            navigate(ROUTE_PATH.DASHBOARD)
           }}>
-          SplitIt
-        </Typography>
+          <img
+            src={Logo}
+            alt="Split It"
+            style={{ width: '36px', marginRight: '6px' }}
+          />
+          <Typography
+            component="div"
+            sx={{
+              flexGrow: 1,
+              fontFamily: 'Poppins',
+              fontWeight: '500',
+              fontSize: '22px',
+            }}>
+            SplitIt
+          </Typography>
+        </Box>
 
         {/* User Avatar and Settings Menu */}
         <Box sx={{ flexGrow: 0 }}>
