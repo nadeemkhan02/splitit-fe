@@ -40,7 +40,7 @@ const DashboardFooter = () => {
     <>
       <Box
         sx={{
-          backgroundColor: colors.primaryLight,
+          // backgroundColor: colors.primaryLight,
           height: '58px',
           position: 'fixed',
           bottom: 0,
@@ -48,7 +48,7 @@ const DashboardFooter = () => {
           transform: 'translateX(-50%)',
           width: '100%',
           maxWidth: '500px',
-          borderRadius: '16px 16px 0px 0px',
+          borderRadius: '14px 14px 0px 0px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -70,6 +70,8 @@ const DashboardFooter = () => {
                   ? colors.primary
                   : colors.primaryLight,
             }}
+            mr={ind === 1 ? '1px' : '0px'}
+            ml={ind === 1 ? '1px' : '0px'}
             onClick={() => {
               navigate(item.link)
             }}>

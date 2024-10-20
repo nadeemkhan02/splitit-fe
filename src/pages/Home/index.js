@@ -85,7 +85,7 @@ const Home = () => {
               alt="Split Bill"
               style={{
                 position: 'absolute',
-                top: '-8px',
+                top: '-6px',
                 left: 4,
                 width: '74%',
                 height: '100%',
@@ -165,7 +165,7 @@ const Home = () => {
                     Get Started!
                   </span>
                   <br /> It’s{' '}
-                  <span style={{ color: colors.darkBlue }}>Free</span>, Its{' '}
+                  <span style={{ color: colors.darkBlue }}>Free</span>, It's{' '}
                   <span style={{ color: colors.darkBlue }}>Easy</span>
                 </p>
               </motion.p>

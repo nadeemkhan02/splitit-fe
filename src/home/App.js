@@ -8,6 +8,7 @@ import Dashboard from '../pages/Dashboard'
 import Trips from '../pages/Trips'
 import Friends from '../pages/Friends'
 import History from '../pages/History'
+import CreateTrip from '../pages/CreateTrip'
 
 const App = () => {
   const isLogedIn = localStorage.getItem('user')
@@ -18,12 +19,13 @@ const App = () => {
         <Routes>
           <Route
             path={'*'}
-            element={<Navigate replace to={ROUTE_PATH.DASHBOARD} />}
+            element={<Navigate replace to={ROUTE_PATH.CREATE_TRIP} />}
           />
           <Route path={ROUTE_PATH.DASHBOARD} element={<Dashboard />} />
           <Route path={ROUTE_PATH.TRIPS} element={<Trips />} />
           <Route path={ROUTE_PATH.FRIENDS} element={<Friends />} />
           <Route path={ROUTE_PATH.HISTORY} element={<History />} />
+          <Route path={ROUTE_PATH.CREATE_TRIP} element={<CreateTrip />} />
         </Routes>
       ) : (
         <Routes>

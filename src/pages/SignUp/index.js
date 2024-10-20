@@ -8,6 +8,7 @@ import { form } from 'framer-motion/client'
 import { signUpApiUrl } from '../../utils/urls'
 import axios from 'axios'
 import { toastMessage } from '../../common/ToastMessage'
+import { validatePassword } from '../../utils/validation'
 
 const SignUp = () => {
   const [formDetails, setFormDetails] = useState({
@@ -22,11 +23,12 @@ const SignUp = () => {
     isValidForm: false,
   })
   const validateForm = (formDetails) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (
-      formDetails.isValidName &&
-      formDetails.isValidEmail &&
-      formDetails.isValidPassword &&
-      formDetails.isValidConfirmPassword
+      formDetails.name.trim().length > 0 &&
+      emailPattern.test(formDetails.email) &&
+      validatePassword(formDetails.password) &&
+      formDetails.password === formDetails.confirmPassword
     ) {
       return true
     }
@@ -47,7 +49,7 @@ const SignUp = () => {
         FormDetails.isValidEmail = emailPattern.test(value)
         break
       case 'password':
-        FormDetails.isValidPassword = value.length >= 6 // Example password validation
+        FormDetails.isValidPassword = validatePassword(value) // Example password validation
         break
       case 'confirmPassword':
         FormDetails.isValidConfirmPassword = value === formDetails.password
@@ -76,6 +78,8 @@ const SignUp = () => {
           console.log(response)
           if (response.status === 200) {
             toastMessage('success', 'Sign up successful')
+            localStorage.setItem('user', JSON.stringify(response.data))
+            window.location.reload()
           } else {
             console.log(response.response, '<<>>')
             toastMessage('error', response.response.data)
@@ -168,7 +172,7 @@ const SignUp = () => {
                 value={formDetails.password}
                 onChange={handleChange} // Add onChange handler
                 isValid={formDetails.isValidPassword}
-                message={'Password must be at least 6 characters'}
+                message={'Password must be at least 8 characters'}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     height: '44px !important',

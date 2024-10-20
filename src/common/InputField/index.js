@@ -9,10 +9,12 @@ import {
   InputLabel,
   TextareaAutosize,
   Typography,
+  Button,
 } from '@mui/material'
 import EyeOff from '../../assets/icons/eye-off.svg'
 import EyeOn from '../../assets/icons/eye.svg'
 import './index.css'
+import colors from '../../constants/colors'
 
 const multiLineStyles = {
   root: {
@@ -53,17 +55,70 @@ export const InputField = function ({
   onKeyPress,
   InputProps,
   ref,
+  onSetTomorrow,
+  onSetDayAfterTomorrow,
 }) {
+  const getDateString = (daysOffset) => {
+    const date = new Date()
+    date.setDate(date.getDate() + daysOffset)
+    return date.toISOString().split('T')[0] // Returns date in YYYY-MM-DD format
+  }
   return (
     <>
-      {isLabel && (
-        <InputLabel
-          htmlFor={name}
-          required={isRequired}
-          className="inputfield-label">
-          {label}
-        </InputLabel>
-      )}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          alignContent: 'center',
+          marginBottom: isLabel && type === 'date' && '-8px',
+        }}>
+        {isLabel && type === 'date' ? (
+          <InputLabel
+            htmlFor={name}
+            required={isRequired}
+            className="inputfield-label"
+            style={{ marginRight: '8px' }}>
+            {label}
+          </InputLabel>
+        ) : (
+          <InputLabel
+            htmlFor={name}
+            required={isRequired}
+            className="inputfield-label"
+            style={{ marginRight: '8px' }}>
+            {label}
+          </InputLabel>
+        )}
+        {type === 'date' && (
+          <div>
+            <Button
+              sx={{
+                textTransform: 'none',
+                fontSize: '16px',
+                marginBottom: '6px',
+                color: value === getDateString(2) ? colors.primary : 'grey',
+                marginRight: '4px',
+              }}
+              onClick={onSetTomorrow}
+              variant="text">
+              Tomorrow
+            </Button>
+            <Button
+              sx={{
+                textTransform: 'none',
+                marginBottom: '6px',
+                fontSize: '16px',
+                color: value === getDateString(3) ? colors.primary : 'grey',
+                p: '0',
+              }}
+              onClick={onSetDayAfterTomorrow}
+              variant="text">
+              Overmorrow
+            </Button>
+          </div>
+        )}
+      </div>
       <TextField
         id={name}
         type={type}
@@ -217,7 +272,10 @@ export const InputBox = function ({
   return (
     <>
       {isLabel && (
-        <InputLabel required={isRequired} className="inputfield-label">
+        <InputLabel
+          required={isRequired}
+          sx={{ pb: '2px' }}
+          className="inputfield-label">
           {label}
         </InputLabel>
       )}
@@ -240,9 +298,6 @@ export const InputBox = function ({
           minRows={minRows}
           maxLength="1000"
         />
-        <div className="textAreaCharLimit">
-          {1000 - value?.length} characters remaining
-        </div>
         <div>
           <small
             style={{

@@ -88,7 +88,7 @@ const DashboardNavBar = () => {
         <Box
           sx={{ display: 'flex', alignItems: 'center' }}
           onClick={() => {
-            navigate(ROUTE_PATH.DASHBOARD)
+            navigate(ROUTE_PATH.CREATE_TRIP)
           }}>
           <img
             src={Logo}

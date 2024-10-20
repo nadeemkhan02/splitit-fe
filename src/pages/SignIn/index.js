@@ -35,7 +35,7 @@ const SignIn = () => {
         updatedFormDetails.isValidEmail = emailPattern.test(value)
         break
       case 'password':
-        updatedFormDetails.isValidPassword = value.length >= 6
+        updatedFormDetails.isValidPassword = value.length >= 8
         break
       default:
         break
@@ -58,7 +58,6 @@ const SignIn = () => {
         .then((response) => {
           if (response.status === 200) {
             toastMessage('success', 'Sign in successful') // Get the auth-token from headers
-            console.log(response)
             localStorage.setItem('user', JSON.stringify(response.data))
             window.location.reload() // Force page reload
           } else {
@@ -132,7 +131,7 @@ const SignIn = () => {
               value={formDetails.password}
               onChange={handleChange}
               isValid={formDetails.isValidPassword}
-              message={'Password must be at least 6 characters'}
+              message={'Password must be at least 8 characters'}
               sx={{
                 '& .MuiOutlinedInput-root': {
                   height: '44px !important',

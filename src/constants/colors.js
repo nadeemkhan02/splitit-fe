@@ -1,5 +1,3 @@
-import { text } from 'framer-motion/client'
-
 const colors = {
   primary: '#1876D1',
   primaryLight: '#8BBAE7',

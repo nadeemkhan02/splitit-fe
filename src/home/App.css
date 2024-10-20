@@ -58,7 +58,7 @@ p {
 /* Optional: Add some styling for mobile responsiveness */
 @media (max-width: 600px) {
     .container {
-        width: 90%;
+        width: 100%;
         /* Use 90% width on smaller screens */
         min-width: 100vw;
         /* Maintain minimum width for usability */
@@ -75,4 +75,9 @@ p {
     --font-weight-normal: 400;
     --font-size: 15px;
     --line-height: 24px;
+}
+
+.date-input {
+    text-align: left;
+    /* Align text to the left */
 }

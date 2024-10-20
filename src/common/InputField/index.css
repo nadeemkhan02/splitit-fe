@@ -14,6 +14,10 @@
     margin-bottom: 6px !important;
 }
 
+.MuiFormLabel-asterisk {
+    color: red;
+}
+
 
 .MuiOutlinedInput-root fieldset {
     border: 1px solid var(--primary-color);
@@ -43,4 +47,91 @@
 
 .MuiOutlinedInput-root.Mui-error fieldset {
     border: 1px solid var(--error-color) !important;
+}
+
+
+/* TextArea Custom Styles */
+.text-area-field-container textarea {
+    width: 100% !important;
+    min-height: 100px;
+    /* Ensure full width */
+    padding: 10px;
+    font-family: var(--font-family) !important;
+    font-weight: var(--font-weight-normal);
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+    border: 1px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+    /* Ensure padding doesn't exceed the width */
+}
+
+.text-area-field-container textarea:focus {
+    outline: none;
+    border: 1px solid var(--primary-color) !important;
+}
+
+.text-area-field-container textarea:hover {
+    border-color: var(--primary-color) !important;
+}
+
+.text-area-field-container textarea::placeholder {
+    opacity: 0.5;
+}
+
+.text-area-field-container .textAreaCharLimit {
+    margin-top: 4px;
+    font-size: 12px;
+    color: gray;
+    text-align: right;
+}
+
+/* Error state for TextArea */
+.text-area-field-container textarea.Mui-error {
+    border-color: var(--error-color) !important;
+}
+
+.text-area-field-container textarea.Mui-error:focus {
+    border-color: var(--error-color) !important;
+}
+
+
+
+/* General styling for input[type="date"] */
+input[type="date"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 10px;
+    font-family: var(--font-family) !important;
+    font-weight: var(--font-weight-normal);
+    font-size: var(--font-size);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--primary-color);
+    background-color: #fff;
+    position: relative;
+}
+
+input[type="date"]:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+/* Show the calendar icon on mobile devices only */
+@media (max-width: 768px) {
+    input[type="date"] {
+        background-image: url('https://cdn-icons-png.flaticon.com/512/747/747310.png');
+        /* Example calendar icon from Flaticon */
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 16px 16px;
+    }
+}
+
+/* Hide the calendar icon on larger screens (desktop) */
+@media (min-width: 769px) {
+    input[type="date"] {
+        background-image: none;
+    }
 }

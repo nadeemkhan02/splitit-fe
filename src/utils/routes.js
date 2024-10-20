@@ -8,4 +8,5 @@ export const ROUTE_PATH = {
   TRIPS: '/trips',
   FRIENDS: '/friends',
   HISTORY: '/history',
+  CREATE_TRIP: '/create-trip',
 }
