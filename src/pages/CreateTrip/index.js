@@ -9,9 +9,11 @@ import colors from '../../constants/colors'
 import DashboardFooter from '../../components/DashboardFooter'
 import SearchBoxSelect from '../../common/SearchBoxSelect'
 import axiosInstance from '../../utils/axios'
-import { getUserListAPiUrl } from '../../utils/urls'
+import { addTripApiUrl, getUserListAPiUrl } from '../../utils/urls'
 import _ from 'lodash'
 import DashboardNavBar from '../../components/DashboadrNavBar'
+import { ROUTE_PATH } from '../../utils/routes'
+import { useNavigate } from 'react-router-dom'
 
 const CreateTrip = () => {
   const [formDetails, setFormDetails] = useState({
@@ -28,8 +30,9 @@ const CreateTrip = () => {
   })
   const [friendList, setFriendList] = useState([])
   const [allFriendList, setAllFriendList] = useState([])
-  const [selectedFriendList, setSelectedFriendList] = useState([])
   const [searchFriendValue, setSearchFriendValue] = useState('')
+  const userData = JSON.parse(localStorage.getItem('user'))
+  const navigate = useNavigate()
 
   useEffect(() => {
     axiosInstance
@@ -63,13 +66,16 @@ const CreateTrip = () => {
   }
 
   const validateForm = (details) => {
-    return details.isValidName && details.isValidTripDate
+    return (
+      details.isValidName &&
+      details.isValidTripDate &&
+      details.friends.length > 0
+    )
   }
 
   const handleChange = (e) => {
     const newFormDetails = { ...formDetails }
     const { name, value } = e.target
-
     // Validate fields
     switch (name) {
       case 'name':
@@ -81,7 +87,6 @@ const CreateTrip = () => {
       default:
         break
     }
-
     newFormDetails[name] = value
     newFormDetails.isValidForm = validateForm(newFormDetails)
     setFormDetails(newFormDetails)
@@ -89,23 +94,29 @@ const CreateTrip = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    const addedFriends = formDetails.friends.map((friend) => {
+      return friend.value
+    })
     if (formDetails.isValidForm) {
       const payload = {
-        name: formDetails.name,
-        description: formDetails.description,
-        tripDate: formDetails.tripDate,
-        tripStatus: formDetails.tripStatus,
-        nonPlatformParticipants: formDetails.nonPlatformParticipants
-          .split(',')
-          .map((p) => p.trim()), // Split participants by commas
+        name: formDetails.name.trim(),
+        description: formDetails.description.trim(),
+        tripCreator: userData._id,
+        tripParticipants: [
+          ...addedFriends,
+          ...(addedFriends.includes(userData._id) ? [] : [userData._id]),
+        ],
+        tripDate: new Date(
+          `${formDetails.tripDate}T00:00:00.000Z`
+        ).toISOString(),
       }
       console.log(payload)
-
-      axios
-        .post('/api/trips', payload)
+      axiosInstance
+        .post(addTripApiUrl, payload)
         .then((response) => {
           if (response.status === 200) {
             toastMessage('success', 'Trip created successfully')
+            navigate(ROUTE_PATH.TRIPS)
           } else {
             toastMessage('error', response.data)
           }
@@ -155,22 +166,25 @@ const CreateTrip = () => {
             <SearchBoxSelect
               isMultiSelect={false}
               menuWidth={'580px'}
-              value={selectedFriendList}
+              value={formDetails.friends}
               label={'Add Friends'}
               name={'person'}
               autoFormat={false}
               isRequired={true}
               multiple={true}
               onChange={(e) => {
-                setSelectedFriendList(e)
+                const newFormDetails = { ...formDetails }
+                newFormDetails.friends = e
+                newFormDetails.isValidForm = validateForm(newFormDetails, e)
+                setFormDetails(newFormDetails)
               }}
               selectionList={[
-                ...selectedFriendList.filter((item) =>
+                ...formDetails.friends.filter((item) =>
                   friendList.includes(item)
                 ),
                 ...friendList.filter(
                   (item) =>
-                    !selectedFriendList.some(
+                    !formDetails.friends.some(
                       (selected) => selected.value === item.value
                     )
                 ),

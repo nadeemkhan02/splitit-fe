@@ -9,6 +9,8 @@ import TripsDark from '../../assets/icons/tripDark.png'
 import FriendsDark from '../../assets/icons/friendsDark.png'
 import { ROUTE_PATH } from '../../utils/routes'
 import { Box, Typography } from '@mui/material'
+import DashboardLight from '../../assets/icons/dashboardLight.png'
+import DashboardDark from '../../assets/icons/dashboardDark.png'
 
 const DashboardFooter = () => {
   const location = useLocation() // Get the current URL
@@ -35,10 +37,17 @@ const DashboardFooter = () => {
       iconDark: HistoryDark,
       link: ROUTE_PATH.HISTORY,
     },
+    {
+      title: 'Dashboard',
+      iconLight: DashboardLight,
+      iconDark: DashboardDark,
+      link: ROUTE_PATH.DASHBOARD,
+    },
   ]
   return (
     <>
       <Box
+        className="dashboard-footer"
         sx={{
           // backgroundColor: colors.primaryLight,
           height: '58px',
@@ -63,15 +72,15 @@ const DashboardFooter = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              borderTopRightRadius: ind === 2 ? '16px' : '0px',
+              borderTopRightRadius: ind === 3 ? '16px' : '0px',
               borderTopLeftRadius: ind === 0 ? '16px' : '0px',
               backgroundColor:
                 location.pathname === item.link
                   ? colors.primary
                   : colors.primaryLight,
             }}
-            mr={ind === 1 ? '1px' : '0px'}
-            ml={ind === 1 ? '1px' : '0px'}
+            // mr={ind === 1 || ind === 2 ? '1px' : '0px'}
+            // ml={ind === 1 ? '1px' : '0px'}
             onClick={() => {
               navigate(item.link)
             }}>
@@ -94,7 +103,7 @@ const DashboardFooter = () => {
               <Typography
                 sx={{
                   fontFamily: 'Poppins, sans-serif',
-                  fontSize: '14px',
+                  fontSize: '12px',
                   pt: '2px',
 
                   color:

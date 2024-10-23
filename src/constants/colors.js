@@ -30,6 +30,7 @@ const colors = {
   black: '#000000',
   textColor1: '#efc020',
   textColor2: '#12bf6d',
+  grey: 'rgba(0, 0, 0, 0.6)',
 }
 
 export default colors

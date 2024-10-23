@@ -1,4 +1,7 @@
-export const signUpApiUrl = 'http://192.168.0.103:3001/api/users/signUp'
-export const getUserListAPiUrl = 'http://192.168.0.103:3001/api/users'
-export const signInApiUrl = 'http://192.168.0.103:3001/api/auth/signIn'
-export const getFriendsApiUrl = 'http://192.168.0.103:3001/api/users'
+const baseUrl = process.env.REACT_APP_API_URL
+export const signUpApiUrl = `${baseUrl}/api/auth/signUp`
+export const getUserListAPiUrl = `${baseUrl}/api/users`
+export const signInApiUrl = `${baseUrl}/api/auth/signIn`
+export const getFriendsApiUrl = `${baseUrl}/api/friends`
+export const addTripApiUrl = `${baseUrl}/api/trips/addTrip`
+export const getTripListApiUrl = `${baseUrl}/api/trips`

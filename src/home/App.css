@@ -57,7 +57,9 @@ p {
 
 /* Optional: Add some styling for mobile responsiveness */
 @media (max-width: 600px) {
-    .container {
+
+    .container,
+    .dashboard-footer {
         width: 100%;
         /* Use 90% width on smaller screens */
         min-width: 100vw;

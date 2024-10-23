@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toastMessage } from '../common/ToastMessage'
 
 // Create an axios instance
 const axiosInstance = axios.create({
@@ -18,6 +19,7 @@ axiosInstance.interceptors.request.use(
     return request // Return the modified request
   },
   (error) => {
+    toastMessage('error', 'Something went wrong!')
     return Promise.reject(error) // Handle request error
   }
 )

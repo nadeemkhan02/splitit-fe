@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
     },
   },
   inputLabel: {
-    color: '#002f6c', // dark blue for label
+    color: colors.grey, // dark blue for label
   },
   searchMenuItem: {
     padding: '2px 0px',
@@ -112,7 +112,7 @@ function SearchBoxSelect({
     selectedValues?.map((i) => i?.value).includes(item?.value)
 
   return (
-    <Box sx={{ maxWidth: '500px', position: 'relative' }}>
+    <Box sx={{ position: 'relative' }}>
       {label && (
         <InputLabel
           className={classes.inputLabel}

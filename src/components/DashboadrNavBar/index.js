@@ -15,8 +15,9 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE_PATH } from '../../utils/routes'
 import Logo from '../../assets/logo/mainLogo.png'
+import CustomButton from '../../common/CustomButton'
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
+const settings = ['Profile', 'Dashboard', 'Logout']
 
 const DashboardNavBar = () => {
   const navigate = useNavigate()
@@ -45,16 +46,13 @@ const DashboardNavBar = () => {
   const userInitials = getInitials(userName) // Example: NK
 
   const handleSettingCLick = (setting) => {
-    console.log(setting, '<<')
     switch (setting) {
       case 'Profile':
         console.log('Profile')
         break
-      case 'Account':
-        console.log('Account')
-        break
       case 'Dashboard':
         console.log('Dashboard')
+        navigate(ROUTE_PATH.DASHBOARD)
         break
       case 'Logout':
         console.log('Logout')
@@ -108,12 +106,29 @@ const DashboardNavBar = () => {
         </Box>
 
         {/* User Avatar and Settings Menu */}
-        <Box sx={{ flexGrow: 0 }}>
+        <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }}>
+          <CustomButton
+            handleClick={(e) => {
+              e.stopPropagation()
+              navigate(ROUTE_PATH.CREATE_TRIP)
+            }}
+            text={'Create Trip'}
+            loadinButtonWidth={'100%'}
+            sx={{
+              height: '36px',
+              width: '100%',
+              backgroundColor: colors.primary,
+              color: '#fff',
+              '&:hover': { backgroundColor: colors.primaryDark },
+              boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)',
+            }}
+          />
           <Tooltip title="Open settings">
             <IconButton
               onClick={handleOpenUserMenu}
               sx={{
                 p: 0,
+                ml: '10px',
                 '&:hover': {
                   backgroundColor: 'transparent',
                 },
