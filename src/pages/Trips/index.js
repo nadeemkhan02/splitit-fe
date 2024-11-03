@@ -11,11 +11,19 @@ import axiosInstance from '../../utils/axios'
 import { getTripListApiUrl } from '../../utils/urls'
 import { toastMessage } from '../../common/ToastMessage'
 import CustomButton from '../../common/CustomButton'
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material'
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Tooltip,
+} from '@mui/material'
 import colors from '../../constants/colors'
 import { OutlinedButton } from '../../common/OutlinedButton'
 import { format } from 'date-fns'
 import AddExpenseModal from '../../components/AddExpenceModal'
+import { calculateFinalSettlement } from '../../utils/calculateFinalSettlement'
+import ExpandMoreIcon from '../../assets/icons/downArrow.svg'
+import InfIcon from '../../assets/icons/ifoIcon.png'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -91,82 +99,6 @@ const Trips = () => {
     setValue(newValue)
   }
 
-  function calculateFairBalances(trip) {
-    // Validate trip object structure
-    if (!trip?.tripParticipants || !trip?.expenses) {
-      console.error(
-        "Invalid trip data: Ensure 'tripParticipants' and 'expenses' are present."
-      )
-      return []
-    }
-
-    const balances = {}
-    let totalAmountPaid = 0
-
-    // Initialize each participant's balance to 0 using their IDs
-    trip.tripParticipants.forEach((participant) => {
-      balances[participant._id] = 0
-    })
-
-    // Process each expense
-    trip.expenses.forEach((expense) => {
-      const amount = expense?.amount ?? 0
-      const paidBy = expense?.paidBy?._id
-      const sharedAmong = expense?.sharedAmong?.map((p) => p._id) ?? []
-
-      // Skip if required details are missing
-      if (!amount || !paidBy || sharedAmong.length === 0) return
-
-      // Update total amount paid
-      totalAmountPaid += amount
-
-      // Calculate the split amount per participant
-      const splitAmount = amount / sharedAmong.length
-
-      // Update balances for each participant in sharedAmong
-      sharedAmong.forEach((participantId) => {
-        balances[participantId] = (balances[participantId] ?? 0) - splitAmount // They owe money
-      })
-
-      // Update the payer's balance
-      balances[paidBy] = (balances[paidBy] ?? 0) + amount // They paid money
-    })
-
-    // Calculate how much each participant should pay or receive
-    const transactions = []
-    const participantsCount = trip.tripParticipants.length
-    const fairShare = totalAmountPaid / participantsCount
-
-    // Generate final balances based on fair share
-    trip.tripParticipants.forEach((participant) => {
-      const participantId = participant._id
-      const participantName = participant.name
-      const balance = balances[participantId]
-
-      // Calculate how much this participant should receive or pay
-      const netBalance = balance - fairShare
-
-      if (netBalance > 0) {
-        // Participant is owed money
-        transactions.push(
-          `${participantName} will receive ${netBalance.toFixed(2)}`
-        )
-      } else if (netBalance < 0) {
-        // Participant owes money
-        transactions.push(
-          `${participantName} owes ${Math.abs(netBalance).toFixed(2)}`
-        )
-      }
-    })
-
-    return transactions
-  }
-
-  console.log(
-    calculateFairBalances(onGoinTrip[0]),
-    onGoinTrip[0],
-    '<<final sum>>>'
-  )
   function calculateTotalAmount(expenses) {
     return expenses.reduce((total, expense) => total + expense.amount, 0)
   }
@@ -278,6 +210,153 @@ const Trips = () => {
                     </Typography>
                   </Box>
                 </Box>
+                <Box sx={{ mb: '20px' }}>
+                  <Accordion
+                    sx={{
+                      boxShadow: 'none', // Remove shadow if needed
+                    }}>
+                    <AccordionSummary
+                      expandIcon={<img src={ExpandMoreIcon} alt="expand" />}
+                      aria-controls="panel1-content"
+                      id="panel1-header"
+                      sx={{
+                        fontFamily: 'Poppins, sans-serif', // Set font family
+                        backgroundColor: colors.iceBlue, // Change background color
+                      }}>
+                      Expenses ({item.expenses.length})
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      {React.Children.toArray(
+                        item.expenses.map((expense, index) => (
+                          <Box
+                            key={index}
+                            sx={{
+                              display: 'flex',
+                              padding: '10px 0px',
+                              flexDirection: 'row',
+                              alignItems: 'start',
+                              justifyContent: 'space-between',
+
+                              width: '100%',
+                              marginBottom: '10px',
+                              borderBottom: `1px solid ${colors.primaryLight}`,
+                            }}>
+                            <Box
+                              sx={{
+                                width: '60%',
+                                elipsis: 'true',
+                              }}>
+                              <Typography
+                                sx={{
+                                  fontSize: '14px',
+                                  fontWeight: '400',
+                                  marginRight: '10px',
+                                  fontFamily: 'Poppins',
+                                }}>
+                                {expense.title}
+                              </Typography>
+                              <Typography
+                                sx={{
+                                  fontSize: '14px',
+                                  fontWeight: '400',
+                                  marginRight: '10px',
+                                  fontFamily: 'Poppins',
+                                }}>
+                                {expense.description}
+                              </Typography>
+                            </Box>
+                            <Box
+                              sx={{
+                                width: '40%',
+                              }}>
+                              <Typography
+                                sx={{
+                                  fontSize: '12px',
+                                  fontWeight: '600',
+                                  marginRight: '10px',
+                                  fontFamily: 'Poppins',
+                                }}>
+                                Amount:{' '}
+                                <span style={{ color: colors.primary }}>
+                                  {expense.amount}₹
+                                </span>
+                              </Typography>
+                              <Typography
+                                sx={{
+                                  fontSize: '12px',
+                                  fontWeight: '600',
+                                  marginRight: '10px',
+                                  fontFamily: 'Poppins',
+                                }}>
+                                Paid By:{' '}
+                                <span style={{ color: colors.primary }}>
+                                  {expense.paidBy.name}
+                                </span>
+                              </Typography>
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                  justifyContent: 'start',
+                                }}>
+                                {' '}
+                                <Typography
+                                  sx={{
+                                    fontSize: '12px',
+                                    fontWeight: '600',
+                                    marginRight: '10px',
+                                    fontFamily: 'Poppins',
+                                  }}>
+                                  Shared Among:
+                                </Typography>
+                                <Tooltip title="Delete">
+                                  <img
+                                    src={InfIcon}
+                                    style={{ width: '16px' }}
+                                    alt="group"
+                                  />
+                                </Tooltip>
+                              </Box>
+                            </Box>
+                          </Box>
+                        ))
+                      )}
+                    </AccordionDetails>
+                  </Accordion>
+                </Box>
+
+                {/* <Box sx={{ mb: '20px' }}>
+                  <Typography
+                    sx={{
+                      fontStyle: 'Poppins',
+                      fontSize: '14px',
+                      fontWeight: 'bold',
+                    }}>
+                    Final Settlement:
+                    <Typography
+                      component="div"
+                      sx={{ fonrFamily: 'Poppins', fontSize: '14px' }}>
+                      {calculateFinalSettlement(item)
+                        ?.map((settlement) => {
+                          const amount = settlement.amount.toFixed(2)
+                          console.log(settlement)
+                          return `${
+                            settlement?.fromId === userData._id
+                              ? 'you'
+                              : settlement.from
+                          } gives ₹${amount} to ${
+                            settlement?.toId === userData._id
+                              ? 'you'
+                              : settlement.to
+                          }`
+                        })
+                        .map((sentence, index) => (
+                          <div key={index}>{sentence}</div>
+                        ))}
+                    </Typography>
+                  </Typography>
+                </Box> */}
                 <CustomButton
                   sx={{ width: '100%' }}
                   text={'Add Your Expence'}

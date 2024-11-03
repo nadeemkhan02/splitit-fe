@@ -9,8 +9,7 @@ body {
     /* No margin for body */
     padding: 0 !important;
     /* No padding for body */
-    height: 100vh;
-
+    height: 100dvh;
     /* height: 100dvh; */
     /* Full viewport height */
     background-color: #f0f0f0;
@@ -27,7 +26,7 @@ body {
     width: 100%;
     max-width: 500px;
     min-width: 500px;
-    height: 100vh;
+    height: 100%;
     /* height: 100dvh; */
     background-color: #ffffff;
     padding: 0px;

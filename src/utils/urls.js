@@ -6,3 +6,4 @@ export const getFriendsApiUrl = `${baseUrl}/api/friends`
 export const addTripApiUrl = `${baseUrl}/api/trips/addTrip`
 export const getTripListApiUrl = `${baseUrl}/api/trips`
 export const addExpenseApiUrl = `${baseUrl}/api/expenses/addExpense`
+export const updateFriend = `${baseUrl}/api/users/addFriend`
