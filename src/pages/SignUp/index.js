@@ -65,28 +65,23 @@ const SignUp = () => {
   const hadleSubmit = (e) => {
     e.preventDefault()
     if (formDetails.isValidForm) {
-      console.log('Form submitted', formDetails)
       const payload = {
         name: formDetails.name,
         email: formDetails.email,
         password: formDetails.password,
       }
-      console.log(payload)
       axios
         .post(signUpApiUrl, payload)
         .then((response) => {
-          console.log(response)
           if (response.status === 200) {
             toastMessage('success', 'Sign up successful')
             localStorage.setItem('user', JSON.stringify(response.data))
             window.location.reload()
           } else {
-            console.log(response.response, '<<>>')
             toastMessage('error', response.response.data)
           }
         })
         .catch((error) => {
-          console.log(error)
           toastMessage('error', error?.response?.data)
         })
     } else {

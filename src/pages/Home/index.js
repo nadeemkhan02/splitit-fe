@@ -159,9 +159,7 @@ const Home = () => {
                   }}>
                   <span
                     style={{ color: colors.primary, cursor: 'pointer' }}
-                    onClick={(e) => {
-                      console.log('clicked')
-                    }}>
+                    onClick={(e) => {}}>
                     Get Started!
                   </span>
                   <br /> It’s{' '}

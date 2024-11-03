@@ -15,10 +15,10 @@ import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material'
 import colors from '../../constants/colors'
 import { OutlinedButton } from '../../common/OutlinedButton'
 import { format } from 'date-fns'
+import AddExpenseModal from '../../components/AddExpenceModal'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
-
   return (
     <div
       role="tabpanel"
@@ -53,21 +53,28 @@ const Trips = () => {
   ]
   const [onGoinTrip, setOnGoinTrip] = useState([])
   const [upcomingTrip, setUpcomingTrip] = useState([])
+  const [tripDetails, setTripDetails] = useState({})
+  const [isModalOpen, setModalOpen] = useState(false)
+  const handleOpen = (tripDetails) => {
+    console.log('open')
+    setTripDetails(tripDetails)
+    setModalOpen(true)
+  }
+  const handleClose = () => setModalOpen(false)
 
   useEffect(() => {
-    console.log('Trip page loaded<<')
     axiosInstance
       .get(`${getTripListApiUrl}?userId=${userData._id}`)
       .then((response) => {
         console.log(response)
         if (response.status === 200) {
-          console.log(response.data, '<<')
           const onGpoingTrip = response.data.filter(
             (trip) => new Date(trip.tripDate) <= new Date()
           )
           const upcommingTrip = response.data.filter(
             (trip) => new Date(trip.tripDate) > new Date()
           )
+
           setOnGoinTrip(onGpoingTrip)
           setUpcomingTrip(upcommingTrip)
         } else {
@@ -84,6 +91,90 @@ const Trips = () => {
     setValue(newValue)
   }
 
+  function calculateFairBalances(trip) {
+    // Validate trip object structure
+    if (!trip?.tripParticipants || !trip?.expenses) {
+      console.error(
+        "Invalid trip data: Ensure 'tripParticipants' and 'expenses' are present."
+      )
+      return []
+    }
+
+    const balances = {}
+    let totalAmountPaid = 0
+
+    // Initialize each participant's balance to 0 using their IDs
+    trip.tripParticipants.forEach((participant) => {
+      balances[participant._id] = 0
+    })
+
+    // Process each expense
+    trip.expenses.forEach((expense) => {
+      const amount = expense?.amount ?? 0
+      const paidBy = expense?.paidBy?._id
+      const sharedAmong = expense?.sharedAmong?.map((p) => p._id) ?? []
+
+      // Skip if required details are missing
+      if (!amount || !paidBy || sharedAmong.length === 0) return
+
+      // Update total amount paid
+      totalAmountPaid += amount
+
+      // Calculate the split amount per participant
+      const splitAmount = amount / sharedAmong.length
+
+      // Update balances for each participant in sharedAmong
+      sharedAmong.forEach((participantId) => {
+        balances[participantId] = (balances[participantId] ?? 0) - splitAmount // They owe money
+      })
+
+      // Update the payer's balance
+      balances[paidBy] = (balances[paidBy] ?? 0) + amount // They paid money
+    })
+
+    // Calculate how much each participant should pay or receive
+    const transactions = []
+    const participantsCount = trip.tripParticipants.length
+    const fairShare = totalAmountPaid / participantsCount
+
+    // Generate final balances based on fair share
+    trip.tripParticipants.forEach((participant) => {
+      const participantId = participant._id
+      const participantName = participant.name
+      const balance = balances[participantId]
+
+      // Calculate how much this participant should receive or pay
+      const netBalance = balance - fairShare
+
+      if (netBalance > 0) {
+        // Participant is owed money
+        transactions.push(
+          `${participantName} will receive ${netBalance.toFixed(2)}`
+        )
+      } else if (netBalance < 0) {
+        // Participant owes money
+        transactions.push(
+          `${participantName} owes ${Math.abs(netBalance).toFixed(2)}`
+        )
+      }
+    })
+
+    return transactions
+  }
+
+  console.log(
+    calculateFairBalances(onGoinTrip[0]),
+    onGoinTrip[0],
+    '<<final sum>>>'
+  )
+  function calculateTotalAmount(expenses) {
+    return expenses.reduce((total, expense) => total + expense.amount, 0)
+  }
+  function calculateTotalAmountPaidBy(expenses, userId) {
+    return expenses
+      .filter((expense) => expense.paidBy._id === userId) // Filter expenses paid by the specified user
+      .reduce((total, expense) => total + expense.amount, 0) // Sum up the amounts
+  }
   return (
     <>
       <DashboardNavBar />
@@ -159,9 +250,40 @@ const Trips = () => {
                     Details
                   </OutlinedButton>
                 </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    pb: '10px',
+                  }}>
+                  <Box>
+                    <Typography sx={{ fontStyle: 'Poppins', fontSize: '14px' }}>
+                      Trip Expence :{' '}
+                      <span style={{ fontWeight: 'bold' }}>
+                        {calculateTotalAmount(item.expenses)}₹
+                      </span>
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography sx={{ fontStyle: 'Poppins', fontSize: '14px' }}>
+                      Your Expence :{' '}
+                      <span style={{ fontWeight: 'bold' }}>
+                        {calculateTotalAmountPaidBy(
+                          item.expenses,
+                          userData._id
+                        )}
+                        ₹
+                      </span>
+                    </Typography>
+                  </Box>
+                </Box>
                 <CustomButton
                   sx={{ width: '100%' }}
                   text={'Add Your Expence'}
+                  handleClick={() => {
+                    handleOpen(item)
+                  }}
                 />
               </Box>
             ))}
@@ -228,6 +350,11 @@ const Trips = () => {
           ))}
         </TabPanel>
       </Box>
+      <AddExpenseModal
+        open={isModalOpen}
+        handleClose={handleClose}
+        tripDetails={tripDetails}
+      />
       <DashboardFooter />
     </>
   )

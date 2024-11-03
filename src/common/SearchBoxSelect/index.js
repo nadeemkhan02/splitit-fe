@@ -81,6 +81,8 @@ function SearchBoxSelect({
   handleSearchClear,
   searchValue,
   handleSearchChange,
+  height,
+  isSearchable = true,
 }) {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
@@ -132,7 +134,7 @@ function SearchBoxSelect({
             fontFamily: 'Poppins',
             fontSize: '16px',
             fontWeight: '400',
-            height: '44px',
+            height: height ? height : '44px',
             width: '100%',
             borderRadius: '4px',
             textTransform: 'none',
@@ -208,14 +210,16 @@ function SearchBoxSelect({
         }}
         disableAutoFocusItem
         disableEnforceFocus>
-        <Box sx={{ p: '0px 6px' }}>
-          <SearchBar
-            value={searchValue}
-            onChange={handleSearchChange}
-            onClear={handleSearchClear}
-            disabled={disabled}
-          />
-        </Box>
+        {isSearchable && (
+          <Box sx={{ p: '0px 6px' }}>
+            <SearchBar
+              value={searchValue}
+              onChange={handleSearchChange}
+              onClear={handleSearchClear}
+              disabled={disabled}
+            />
+          </Box>
+        )}
         <Box className={classes.scrollBox}>
           {selectionList?.length ? (
             selectionList.map((item) => (

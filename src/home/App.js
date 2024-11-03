@@ -12,7 +12,6 @@ import CreateTrip from '../pages/CreateTrip'
 
 const App = () => {
   const isLogedIn = localStorage.getItem('user')
-  console.log(isLogedIn, '<<')
   return (
     <div>
       {isLogedIn ? (

@@ -65,7 +65,6 @@ const SignIn = () => {
           }
         })
         .catch((error) => {
-          console.log(error)
           toastMessage('error', error?.response?.data || 'Sign in failed')
         })
     } else {

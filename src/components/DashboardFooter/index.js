@@ -50,7 +50,7 @@ const DashboardFooter = () => {
         className="dashboard-footer"
         sx={{
           // backgroundColor: colors.primaryLight,
-          height: '58px',
+          // height: '58px',
           position: 'fixed',
           bottom: 0,
           left: '50%',
@@ -66,7 +66,7 @@ const DashboardFooter = () => {
           <Box
             key={ind}
             sx={{
-              p: '4px 20px 0px 20px',
+              p: '10px 20px 10px 20px',
               width: '33.33%',
               height: '100%',
               display: 'flex',

@@ -48,7 +48,6 @@ const CreateTrip = () => {
         }
       })
       .catch((error) => {
-        console.log(error)
         toastMessage('error', 'Error while fetching user list')
       })
   }, [])
@@ -110,7 +109,6 @@ const CreateTrip = () => {
           `${formDetails.tripDate}T00:00:00.000Z`
         ).toISOString(),
       }
-      console.log(payload)
       axiosInstance
         .post(addTripApiUrl, payload)
         .then((response) => {
@@ -125,7 +123,6 @@ const CreateTrip = () => {
           toastMessage('error', error?.response?.data)
         })
     } else {
-      console.log('Form is invalid')
     }
   }
 

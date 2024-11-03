@@ -22,6 +22,7 @@ const settings = ['Profile', 'Dashboard', 'Logout']
 const DashboardNavBar = () => {
   const navigate = useNavigate()
   const [anchorElUser, setAnchorElUser] = React.useState(null)
+  const userData = JSON.parse(localStorage.getItem('user'))
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget)
@@ -42,20 +43,17 @@ const DashboardNavBar = () => {
   }
 
   // Replace 'Nadeem Khan' with the actual user name (e.g., from props or context)
-  const userName = 'Nadeem Khan'
+  const userName = userData?.name
   const userInitials = getInitials(userName) // Example: NK
 
   const handleSettingCLick = (setting) => {
     switch (setting) {
       case 'Profile':
-        console.log('Profile')
         break
       case 'Dashboard':
-        console.log('Dashboard')
         navigate(ROUTE_PATH.DASHBOARD)
         break
       case 'Logout':
-        console.log('Logout')
         localStorage.clear()
         window.location.reload()
         toast.success('success', 'Logout Successfully')
