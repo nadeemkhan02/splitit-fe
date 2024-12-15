@@ -18,6 +18,7 @@ const SignIn = () => {
     isValidPassword: true,
     isValidForm: false,
   })
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
   const validateForm = (formDetails) => {
@@ -53,20 +54,29 @@ const SignIn = () => {
         email: formDetails.email,
         password: formDetails.password,
       }
-      axios
-        .post(signInApiUrl, payload)
-        .then((response) => {
-          if (response.status === 200) {
-            toastMessage('success', 'Sign in successful') // Get the auth-token from headers
-            localStorage.setItem('user', JSON.stringify(response.data))
-            window.location.reload() // Force page reload
-          } else {
-            toastMessage('error', response.data.message)
-          }
-        })
-        .catch((error) => {
-          toastMessage('error', error?.response?.data || 'Sign in failed')
-        })
+      setIsLoading(true)
+      try {
+        axios
+          .post(signInApiUrl, payload)
+          .then((response) => {
+            if (response.status === 200) {
+              toastMessage('success', 'Sign in successful') // Get the auth-token from headers
+              localStorage.setItem('user', JSON.stringify(response.data))
+              window.location.reload() // Force page reload
+            } else {
+              toastMessage('error', response.data.message)
+            }
+          })
+          .catch((error) => {
+            toastMessage('error', error?.response?.data || 'Sign in failed')
+          })
+          .finally(() => {
+            setIsLoading(false)
+          })
+      } catch (error) {
+        toastMessage('error', 'Something went wrong')
+        setIsLoading(false)
+      }
     } else {
       toastMessage('error', 'Please enter valid credentials')
     }
@@ -142,6 +152,7 @@ const SignIn = () => {
               handleClick={handleSubmit}
               text={'Sign In'}
               loadinButtonWidth={'100%'}
+              isLoading={isLoading}
               sx={{
                 height: '44px',
                 width: '100%',

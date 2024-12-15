@@ -22,6 +22,7 @@ const SignUp = () => {
     isValidConfirmPassword: true,
     isValidForm: false,
   })
+  const [isLoading, setIsLoading] = useState(false)
   const validateForm = (formDetails) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (
@@ -70,20 +71,34 @@ const SignUp = () => {
         email: formDetails.email,
         password: formDetails.password,
       }
-      axios
-        .post(signUpApiUrl, payload)
-        .then((response) => {
-          if (response.status === 200) {
-            toastMessage('success', 'Sign up successful')
-            localStorage.setItem('user', JSON.stringify(response.data))
-            window.location.reload()
-          } else {
-            toastMessage('error', response.response.data)
-          }
-        })
-        .catch((error) => {
-          toastMessage('error', error?.response?.data)
-        })
+      setIsLoading(true)
+      try {
+        axios
+          .post(signUpApiUrl, payload)
+          .then((response) => {
+            if (response.status === 200) {
+              toastMessage('success', 'Sign up successful')
+              localStorage.setItem('user', JSON.stringify(response.data))
+              window.location.reload()
+              setIsLoading(false)
+            } else {
+              toastMessage('error', response.response.data)
+              setIsLoading(false)
+            }
+          })
+          .catch((error) => {
+            toastMessage('error', error?.response?.data)
+            setIsLoading(false)
+          })
+          .finally(() => {
+            setIsLoading(false)
+          })
+      } catch (error) {
+        toastMessage('error', 'Something went wrong')
+        setIsLoading(false)
+      } finally {
+        setIsLoading(false)
+      }
     } else {
       console.log('Form is invalid')
     }
@@ -195,9 +210,6 @@ const SignUp = () => {
 
             {/* Sign Up Button */}
             <CustomButton
-              handleClick={() => {
-                console.log('Sign Up')
-              }}
               text={'Sign Up'}
               loadinButtonWidth={'100%'}
               sx={{

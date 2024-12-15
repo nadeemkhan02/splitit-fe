@@ -25,9 +25,13 @@ const style = {
   p: 4,
 }
 
-export default function AddExpenseModal({ open, handleClose, tripDetails }) {
+export default function AddExpenseModal({
+  open,
+  handleClose,
+  tripDetails,
+  onSuccessAction,
+}) {
   const userDeatails = JSON.parse(localStorage.getItem('user'))
-
   const [userList, setUserList] = useState([])
   const [formDetails, setFormDetails] = useState({
     amount: '',
@@ -39,6 +43,7 @@ export default function AddExpenseModal({ open, handleClose, tripDetails }) {
     isValidTitle: true,
     isValidForm: false,
   })
+  const [isLoading, setIsLoading] = useState(false)
 
   const clearFormDetails = () => {
     setFormDetails({
@@ -57,10 +62,12 @@ export default function AddExpenseModal({ open, handleClose, tripDetails }) {
   useEffect(() => {
     if (!_.isEmpty(tripDetails) && open) {
       const TripParticipants = tripDetails?.tripParticipants?.length
-        ? tripDetails.tripParticipants.map((item) => ({
-            value: item._id,
-            label: item.name,
-          }))
+        ? tripDetails.tripParticipants
+            ?.filter((item) => item?._id !== userDeatails?._id)
+            ?.map((item) => ({
+              value: item._id,
+              label: item.name,
+            }))
         : []
       setUserList(TripParticipants)
       setFormDetails((prevDetails) => ({
@@ -78,7 +85,7 @@ export default function AddExpenseModal({ open, handleClose, tripDetails }) {
     return (
       parseFloat(details.amount) > 0 &&
       details.title.trim().length >= 3 &&
-      details.sharedAmong.length >= 2
+      details.sharedAmong.length >= 1
     )
   }
 
@@ -107,14 +114,12 @@ export default function AddExpenseModal({ open, handleClose, tripDetails }) {
     setFormDetails(FormDetails)
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-
     if (!formDetails.isValidForm) {
       toastMessage('error', 'Please fill in all required fields.')
       return
     }
-
     const payload = {
       trip: tripDetails._id,
       amount: parseFloat(formDetails.amount),
@@ -122,19 +127,33 @@ export default function AddExpenseModal({ open, handleClose, tripDetails }) {
       description: formDetails.description.trim(),
       expenseType: formDetails.expenseType.toLocaleLowerCase(),
       paidBy: userDeatails._id,
-      sharedAmong: formDetails.sharedAmong?.map((item) => item.value),
+      sharedAmong: [
+        ...formDetails.sharedAmong?.map((item) => item.value),
+        userDeatails._id,
+      ],
     }
-
+    setIsLoading(true)
     try {
-      const response = await axiosInstance.post(addExpenseApiUrl, payload)
-      if (response.status === 200) {
-        toastMessage('success', 'Expense added successfully')
-        handleClose() // Close modal on success
-      } else {
-        toastMessage('error', response.data.message)
-      }
+      axiosInstance
+        .post(addExpenseApiUrl, payload)
+        .then((response) => {
+          if (response.status === 200) {
+            toastMessage('success', 'Expense added successfully')
+            handleClose() // Close modal on success
+            setIsLoading(false)
+            onSuccessAction()
+          }
+        })
+        .catch((error) => {
+          toastMessage('error', error?.response?.data)
+          setIsLoading(false)
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
     } catch (error) {
       toastMessage('error', 'Error adding expense')
+      setIsLoading(false)
     }
   }
 
@@ -310,14 +329,16 @@ export default function AddExpenseModal({ open, handleClose, tripDetails }) {
                 multiple={true}
                 onChange={(e) => {
                   const newFormDetails = { ...formDetails }
-                  if (e.length < 2) {
-                    toastMessage('error', 'Please select atleast 2 friends')
+                  if (e.length < 1) {
+                    toastMessage('error', 'Please select atleast 1 friends')
                   }
                   newFormDetails.sharedAmong = e
                   newFormDetails.isValidForm = validateForm(newFormDetails)
                   setFormDetails(newFormDetails)
                 }}
-                selectionList={userList}
+                selectionList={userList?.filter(
+                  (item) => item.value !== userDeatails._id
+                )}
                 searchType={'Add Friends'}
                 placeholder={'Select friends'}
                 labelKeys={'label'}
@@ -327,6 +348,7 @@ export default function AddExpenseModal({ open, handleClose, tripDetails }) {
             <CustomButton
               text="Add Expense"
               onClick={handleSubmit}
+              isLoading={isLoading}
               sx={{
                 mt: 2,
                 backgroundColor: colors.primary,
