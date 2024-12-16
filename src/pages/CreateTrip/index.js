@@ -3,7 +3,6 @@ import { Box, Typography } from '@mui/material'
 import NavBar from '../../components/NavBar'
 import { InputBox, InputField } from '../../common/InputField'
 import CustomButton from '../../common/CustomButton'
-import axios from 'axios'
 import { toastMessage } from '../../common/ToastMessage'
 import colors from '../../constants/colors'
 import DashboardFooter from '../../components/DashboardFooter'
@@ -14,6 +13,7 @@ import _ from 'lodash'
 import DashboardNavBar from '../../components/DashboadrNavBar'
 import { ROUTE_PATH } from '../../utils/routes'
 import { useNavigate } from 'react-router-dom'
+import { isValidPastDate } from '../../utils/isValidPastDate'
 
 const CreateTrip = () => {
   const [formDetails, setFormDetails] = useState({
@@ -31,6 +31,7 @@ const CreateTrip = () => {
   const [friendList, setFriendList] = useState([])
   const [allFriendList, setAllFriendList] = useState([])
   const [searchFriendValue, setSearchFriendValue] = useState('')
+  const [isFormLoading, setIsFormLoading] = useState(false)
   const userData = JSON.parse(localStorage.getItem('user'))
   const navigate = useNavigate()
 
@@ -81,7 +82,7 @@ const CreateTrip = () => {
         newFormDetails.isValidName = value.trim().length > 0
         break
       case 'tripDate':
-        newFormDetails.isValidTripDate = new Date(value) > new Date()
+        newFormDetails.isValidTripDate = isValidPastDate(value)
         break
       default:
         break
@@ -109,18 +110,25 @@ const CreateTrip = () => {
           `${formDetails.tripDate}T00:00:00.000Z`
         ).toISOString(),
       }
+      setIsFormLoading(true)
       axiosInstance
         .post(addTripApiUrl, payload)
         .then((response) => {
           if (response.status === 200) {
             toastMessage('success', 'Trip created successfully')
             navigate(ROUTE_PATH.TRIPS)
+            setIsFormLoading(false)
           } else {
             toastMessage('error', response.data)
+            setIsFormLoading(false)
           }
         })
         .catch((error) => {
           toastMessage('error', error?.response?.data)
+          setIsFormLoading(false)
+        })
+        .finally(() => {
+          setIsFormLoading(false)
         })
     } else {
     }
@@ -229,10 +237,10 @@ const CreateTrip = () => {
               name="tripDate"
               type="date"
               onSetTomorrow={() => {
-                getDate(2)
+                getDate(1)
               }}
               onSetDayAfterTomorrow={() => {
-                getDate(3)
+                getDate(2)
               }}
               value={formDetails.tripDate}
               onChange={handleChange}
@@ -259,7 +267,8 @@ const CreateTrip = () => {
               color: '#fff',
               '&:hover': { backgroundColor: colors.primaryDark },
             }}
-            disabled={!formDetails.isValidForm}
+            disabled={!formDetails.isValidForm || isFormLoading}
+            isLoading={isFormLoading}
           />
         </form>
       </Box>

@@ -97,7 +97,7 @@ export const InputField = function ({
                 textTransform: 'none',
                 fontSize: '16px',
                 marginBottom: '6px',
-                color: value === getDateString(2) ? colors.primary : 'grey',
+                color: value === getDateString(1) ? colors.primary : 'grey',
                 marginRight: '4px',
               }}
               onClick={onSetTomorrow}
@@ -109,7 +109,7 @@ export const InputField = function ({
                 textTransform: 'none',
                 marginBottom: '6px',
                 fontSize: '16px',
-                color: value === getDateString(3) ? colors.primary : 'grey',
+                color: value === getDateString(2) ? colors.primary : 'grey',
                 p: '0',
               }}
               onClick={onSetDayAfterTomorrow}

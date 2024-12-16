@@ -212,6 +212,7 @@ const SignUp = () => {
             <CustomButton
               text={'Sign Up'}
               loadinButtonWidth={'100%'}
+              isLoading={isLoading}
               sx={{
                 height: '44px',
                 width: '100%',
@@ -221,7 +222,7 @@ const SignUp = () => {
                 '&:hover': { backgroundColor: colors.primaryDark },
                 boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)',
               }}
-              disabled={!formDetails.isValidForm} // Disable button if form is invalid
+              disabled={!formDetails.isValidForm || isLoading} // Disable button if form is invalid
             />
           </form>
         </Box>
