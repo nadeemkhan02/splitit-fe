@@ -18,11 +18,13 @@ import TripDetailsModal from '../../components/TripDetailsModal'
 import ExpandMoreIcon from '../../assets/icons/downArrow.svg'
 import NoData from '../../assets/icons/emptyFolder.png'
 import InfIcon from '../../assets/icons/ifoIcon.png'
+import OnScreenLoader from '../../common/OnScreenLoader'
 
 const History = () => {
   const userData = JSON.parse(localStorage.getItem('user'))
 
   const [completedTrip, setCompletedTrip] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const [tripDetailsModalData, setTripDetailsModaldata] = useState({
     isOpen: false,
@@ -30,6 +32,7 @@ const History = () => {
   })
 
   useEffect(() => {
+    setIsLoading(true)
     axiosInstance
       .get(`${getTripListApiUrl}?userId=${userData._id}&isCompleted=${true}`)
       .then((response) => {
@@ -39,12 +42,18 @@ const History = () => {
           )
 
           setCompletedTrip(completedTrip)
+          setIsLoading(false)
         } else {
           toastMessage('error', response?.data || 'Something went wrong')
+          setIsLoading(false)
         }
       })
       .catch((err) => {
         toastMessage('error', err?.response?.data || 'Something went wrong')
+        setIsLoading(false)
+      })
+      .finally(() => {
+        setIsLoading(false)
       })
   }, [])
 
@@ -291,6 +300,7 @@ const History = () => {
         }
       />
       <DashboardFooter />
+      <OnScreenLoader IsLoading={isLoading} />
     </>
   )
 }

@@ -8,15 +8,18 @@ import axiosInstance from '../../utils/axios'
 import { getUserListAPiUrl, updateFriend } from '../../utils/urls'
 import { toastMessage } from '../../common/ToastMessage'
 import _ from 'lodash'
+import OnScreenLoader from '../../common/OnScreenLoader'
 
 const Friends = () => {
   const [friendList, setFriendList] = useState([])
   const [allFriendList, setAllFriendList] = useState([])
   const [searchFriendValue, setSearchFriendValue] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const [addedFriends, setAddedFriends] = useState([])
   const user = JSON.parse(localStorage.getItem('user'))
 
   useEffect(() => {
+    setIsLoading(true)
     axiosInstance
       .get(`${getUserListAPiUrl}/${user?._id}`)
       .then((response) => {
@@ -26,10 +29,15 @@ const Friends = () => {
             label: item.name,
           }))
           setAddedFriends(Friends)
+          setIsLoading(false)
         }
       })
       .catch((error) => {
         toastMessage('error', 'Error while fetching user list')
+        setIsLoading(false)
+      })
+      .finally(() => {
+        setIsLoading(false)
       })
     axiosInstance
       .get(`${getUserListAPiUrl}`)
@@ -130,6 +138,7 @@ const Friends = () => {
         )}
       </Box>
       <DashboardFooter />
+      <OnScreenLoader IsLoading={isLoading} />
     </>
   )
 }

@@ -106,9 +106,11 @@ const CreateTrip = () => {
           ...addedFriends,
           ...(addedFriends.includes(userData._id) ? [] : [userData._id]),
         ],
-        tripDate: new Date(
-          `${formDetails.tripDate}T00:00:00.000Z`
-        ).toISOString(),
+        tripDate: new Date(formDetails.tripDate).toLocaleDateString('en-US', {
+          month: '2-digit',
+          day: '2-digit',
+          year: '2-digit',
+        }),
       }
       setIsFormLoading(true)
       axiosInstance

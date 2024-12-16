@@ -1,0 +1,28 @@
+.onscreen-loader-container {
+  position: fixed;
+  z-index: 10000000000000;
+  height: 100vh;
+  width: 100vw;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: hidden !important;
+  cursor: not-allowed;
+  background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+.onscreen-loader {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.percent-text {
+  text-align: center;
+  color: #ffffff;
+  font-size: 16px;
+}

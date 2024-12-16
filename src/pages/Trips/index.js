@@ -16,17 +16,17 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Modal,
   Tooltip,
 } from '@mui/material'
 import colors from '../../constants/colors'
 import { OutlinedButton } from '../../common/OutlinedButton'
-import { format, set } from 'date-fns'
+import { format } from 'date-fns'
 import AddExpenseModal from '../../components/AddExpenceModal'
 import ExpandMoreIcon from '../../assets/icons/downArrow.svg'
 import InfIcon from '../../assets/icons/ifoIcon.png'
 import TripDetailsModal from '../../components/TripDetailsModal'
 import ConfimModal from '../../components/ConfimModal'
+import OnScreenLoader from '../../common/OnScreenLoader'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -56,6 +56,7 @@ function a11yProps(index) {
 const Trips = () => {
   const theme = useTheme()
   const [value, setValue] = React.useState(0)
+  const [isLoading, setIsLoading] = useState(true)
   const userData = JSON.parse(localStorage.getItem('user'))
   const tabData = [
     { label: 'Ongoing', index: 0 },
@@ -86,6 +87,7 @@ const Trips = () => {
   const handleClose = () => setModalOpen(false)
 
   useEffect(() => {
+    setIsLoading(true)
     axiosInstance
       .get(`${getTripListApiUrl}?userId=${userData._id}&isCompleted=${false}`)
       .then((response) => {
@@ -99,12 +101,18 @@ const Trips = () => {
 
           setOnGoinTrip(onGpoingTrip)
           setUpcomingTrip(upcommingTrip)
+          setIsLoading(false)
         } else {
           toastMessage('error', response?.data || 'Something went wrong')
+          setIsLoading(false)
         }
       })
       .catch((err) => {
         toastMessage('error', err?.response?.data || 'Something went wrong')
+        setIsLoading(false)
+      })
+      .finally(() => {
+        setIsLoading(false)
       })
   }, [refershTripListToggel])
 
@@ -537,6 +545,7 @@ const Trips = () => {
         confirmText={'Are you sure you want to end this trip?'}
       />
       <DashboardFooter />
+      <OnScreenLoader IsLoading={isLoading} />
     </>
   )
 }
