@@ -36,21 +36,23 @@ const CreateTrip = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'))
     axiosInstance
-      .get(`${getUserListAPiUrl}`)
+      .get(`${getUserListAPiUrl}/${user?._id}`)
       .then((response) => {
-        if (_.isArray(response?.data) && response?.data?.length > 0) {
-          const UserList = response?.data.map((user) => ({
-            value: user._id,
-            label: user.name,
+        if (response.status === 200) {
+          const Friends = response.data.friends?.map((item) => ({
+            value: item._id,
+            label: item.name,
           }))
-          setFriendList(UserList)
-          setAllFriendList(UserList)
+          setFriendList(Friends)
+          setAllFriendList(Friends)
         }
       })
       .catch((error) => {
         toastMessage('error', 'Error while fetching user list')
       })
+      .finally(() => {})
   }, [])
 
   const getDate = (day) => {
@@ -179,6 +181,7 @@ const CreateTrip = () => {
               autoFormat={false}
               isRequired={true}
               multiple={true}
+              isCreateTripPage={true}
               onChange={(e) => {
                 const newFormDetails = { ...formDetails }
                 newFormDetails.friends = e

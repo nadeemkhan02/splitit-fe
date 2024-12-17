@@ -17,6 +17,9 @@ import colors from '../../constants/colors'
 import CrossIcon from '../../assets/icons/crossIcon.svg'
 import DownArrow from '../../assets/icons/downArrow.svg'
 import EmptyFolder from '../../assets/icons/emptyFolder.png'
+import CustomButton from '../CustomButton'
+import { ROUTE_PATH } from '../../utils/routes'
+import { useNavigate } from 'react-router-dom'
 
 // Custom styles using the hex color codes
 const useStyles = makeStyles(() => ({
@@ -83,7 +86,9 @@ function SearchBoxSelect({
   handleSearchChange,
   height,
   isSearchable = true,
+  isCreateTripPage = false,
 }) {
+  const navigate = useNavigate()
   const classes = useStyles()
   const [open, setOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -242,20 +247,47 @@ function SearchBoxSelect({
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: '100px',
+                minHeight: '100px',
                 flexDirection: 'column',
+                padding: '20px',
               }}>
               <img
                 src={EmptyFolder}
                 style={{ width: '40px', marginBottom: '4px' }}
                 alt="empty folder"
               />
-              <Typography
-                sx={{
-                  fontFamily: 'Poppins',
-                }}>
-                No data found
-              </Typography>
+              {isCreateTripPage ? (
+                <Box>
+                  <Typography
+                    sx={{
+                      fontFamily: 'Poppins',
+                    }}>
+                    No friends added yet. Please add your friends.
+                  </Typography>
+                  <CustomButton
+                    text={'Add Frinds'}
+                    loadinButtonWidth={'100%'}
+                    handleClick={() => {
+                      navigate(ROUTE_PATH.FRIENDS)
+                    }}
+                    sx={{
+                      height: '32px',
+                      width: '100%',
+                      mt: '20px',
+                      backgroundColor: colors.primary,
+                      color: '#fff',
+                      '&:hover': { backgroundColor: colors.primaryDark },
+                    }}
+                  />
+                </Box>
+              ) : (
+                <Typography
+                  sx={{
+                    fontFamily: 'Poppins',
+                  }}>
+                  No data found
+                </Typography>
+              )}
             </Box>
           )}
         </Box>

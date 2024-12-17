@@ -85,162 +85,130 @@ const History = () => {
               backgroundColor: '#f0f0f0', // Track color (optional)
             },
           }}>
-          {completedTrip?.length ? (
-            completedTrip?.map((item, ind) => (
-              <Box
-                key={ind}
-                sx={{
-                  border: `1px solid ${colors.primaryLight}`,
-                  padding: '20px',
-                  mb: '20px',
-                }}>
+          {completedTrip?.length
+            ? completedTrip?.map((item, ind) => (
                 <Box
+                  key={ind}
                   sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    pb: '20px',
+                    border: `1px solid ${colors.primaryLight}`,
+                    padding: '20px',
+                    mb: '20px',
                   }}>
-                  <Typography sx={{ fontFamily: 'Poppins', width: '30%' }}>
-                    {item.name}
-                  </Typography>
-                  <Box>
-                    <OutlinedButton
-                      variant="outlined"
-                      onClick={() => {
-                        setTripDetailsModaldata({
-                          isOpen: true,
-                          tripDetails: item,
-                        })
-                      }}
-                      sx={{
-                        fontFamily: 'Poppins',
-                        borderColor: colors.primaryLight,
-                      }}>
-                      Details
-                    </OutlinedButton>
-                  </Box>
-                </Box>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    pb: '10px',
-                  }}>
-                  <Box>
-                    <Typography
-                      sx={{ fontFamily: 'Poppins', fontSize: '14px' }}>
-                      Trip Expence :{' '}
-                      <span style={{ fontWeight: 'bold' }}>
-                        {calculateTotalAmount(item.expenses)}₹
-                      </span>
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <Typography
-                      sx={{ fontFamily: 'Poppins', fontSize: '14px' }}>
-                      Your Expence :{' '}
-                      <span style={{ fontWeight: 'bold' }}>
-                        {calculateTotalAmountPaidBy(
-                          item.expenses,
-                          userData._id
-                        )}
-                        ₹
-                      </span>
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box sx={{ mb: '20px' }}>
-                  <Accordion
+                  <Box
                     sx={{
-                      boxShadow: 'none', // Remove shadow if needed
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      pb: '20px',
                     }}>
-                    <AccordionSummary
-                      expandIcon={<img src={ExpandMoreIcon} alt="expand" />}
-                      aria-controls="panel1-content"
-                      id="panel1-header"
+                    <Typography sx={{ fontFamily: 'Poppins', width: '30%' }}>
+                      {item.name}
+                    </Typography>
+                    <Box>
+                      <OutlinedButton
+                        variant="outlined"
+                        onClick={() => {
+                          setTripDetailsModaldata({
+                            isOpen: true,
+                            tripDetails: item,
+                          })
+                        }}
+                        sx={{
+                          fontFamily: 'Poppins',
+                          borderColor: colors.primaryLight,
+                        }}>
+                        Details
+                      </OutlinedButton>
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      pb: '10px',
+                    }}>
+                    <Box>
+                      <Typography
+                        sx={{ fontFamily: 'Poppins', fontSize: '14px' }}>
+                        Trip Expence :{' '}
+                        <span style={{ fontWeight: 'bold' }}>
+                          {calculateTotalAmount(item.expenses)}₹
+                        </span>
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <Typography
+                        sx={{ fontFamily: 'Poppins', fontSize: '14px' }}>
+                        Your Expence :{' '}
+                        <span style={{ fontWeight: 'bold' }}>
+                          {calculateTotalAmountPaidBy(
+                            item.expenses,
+                            userData._id
+                          )}
+                          ₹
+                        </span>
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Box sx={{ mb: '20px' }}>
+                    <Accordion
                       sx={{
-                        fontFamily: 'Poppins, sans-serif', // Set font family
-                        backgroundColor: colors.iceBlue, // Change background color
+                        boxShadow: 'none', // Remove shadow if needed
                       }}>
-                      Expenses ({item.expenses.length})
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      {React.Children.toArray(
-                        item.expenses.map((expense, index) => (
-                          <Box
-                            key={index}
-                            sx={{
-                              display: 'flex',
-                              padding: '10px 0px',
-                              flexDirection: 'row',
-                              alignItems: 'start',
-                              justifyContent: 'space-between',
+                      <AccordionSummary
+                        expandIcon={<img src={ExpandMoreIcon} alt="expand" />}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                        sx={{
+                          fontFamily: 'Poppins, sans-serif', // Set font family
+                          backgroundColor: colors.iceBlue, // Change background color
+                        }}>
+                        Expenses ({item.expenses.length})
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        {React.Children.toArray(
+                          item.expenses.map((expense, index) => (
+                            <Box
+                              key={index}
+                              sx={{
+                                display: 'flex',
+                                padding: '10px 0px',
+                                flexDirection: 'row',
+                                alignItems: 'start',
+                                justifyContent: 'space-between',
 
-                              width: '100%',
-                              marginBottom: '10px',
-                              borderBottom: `1px solid ${colors.primaryLight}`,
-                            }}>
-                            <Box
-                              sx={{
-                                width: '60%',
-                                elipsis: 'true',
+                                width: '100%',
+                                marginBottom: '10px',
+                                borderBottom: `1px solid ${colors.primaryLight}`,
                               }}>
-                              <Typography
-                                sx={{
-                                  fontSize: '14px',
-                                  fontWeight: '400',
-                                  marginRight: '10px',
-                                  fontFamily: 'Poppins',
-                                }}>
-                                {expense.title}
-                              </Typography>
-                              <Typography
-                                sx={{
-                                  fontSize: '14px',
-                                  fontWeight: '400',
-                                  marginRight: '10px',
-                                  fontFamily: 'Poppins',
-                                }}>
-                                {expense.description}
-                              </Typography>
-                            </Box>
-                            <Box
-                              sx={{
-                                width: '40%',
-                              }}>
-                              <Typography
-                                sx={{
-                                  fontSize: '12px',
-                                  fontWeight: '600',
-                                  marginRight: '10px',
-                                  fontFamily: 'Poppins',
-                                }}>
-                                Amount:{' '}
-                                <span style={{ color: colors.primary }}>
-                                  {expense.amount}₹
-                                </span>
-                              </Typography>
-                              <Typography
-                                sx={{
-                                  fontSize: '12px',
-                                  fontWeight: '600',
-                                  marginRight: '10px',
-                                  fontFamily: 'Poppins',
-                                }}>
-                                Paid By:{' '}
-                                <span style={{ color: colors.primary }}>
-                                  {expense.paidBy.name}
-                                </span>
-                              </Typography>
                               <Box
                                 sx={{
-                                  display: 'flex',
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                  justifyContent: 'start',
+                                  width: '60%',
+                                  elipsis: 'true',
                                 }}>
-                                {' '}
+                                <Typography
+                                  sx={{
+                                    fontSize: '14px',
+                                    fontWeight: '400',
+                                    marginRight: '10px',
+                                    fontFamily: 'Poppins',
+                                  }}>
+                                  {expense.title}
+                                </Typography>
+                                <Typography
+                                  sx={{
+                                    fontSize: '14px',
+                                    fontWeight: '400',
+                                    marginRight: '10px',
+                                    fontFamily: 'Poppins',
+                                  }}>
+                                  {expense.description}
+                                </Typography>
+                              </Box>
+                              <Box
+                                sx={{
+                                  width: '40%',
+                                }}>
                                 <Typography
                                   sx={{
                                     fontSize: '12px',
@@ -248,48 +216,80 @@ const History = () => {
                                     marginRight: '10px',
                                     fontFamily: 'Poppins',
                                   }}>
-                                  Shared Among:
+                                  Amount:{' '}
+                                  <span style={{ color: colors.primary }}>
+                                    {expense.amount}₹
+                                  </span>
                                 </Typography>
-                                <Tooltip title="Delete">
-                                  <img
-                                    src={InfIcon}
-                                    style={{ width: '16px' }}
-                                    alt="group"
-                                  />
-                                </Tooltip>
+                                <Typography
+                                  sx={{
+                                    fontSize: '12px',
+                                    fontWeight: '600',
+                                    marginRight: '10px',
+                                    fontFamily: 'Poppins',
+                                  }}>
+                                  Paid By:{' '}
+                                  <span style={{ color: colors.primary }}>
+                                    {expense.paidBy.name}
+                                  </span>
+                                </Typography>
+                                <Box
+                                  sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'start',
+                                  }}>
+                                  {' '}
+                                  <Typography
+                                    sx={{
+                                      fontSize: '12px',
+                                      fontWeight: '600',
+                                      marginRight: '10px',
+                                      fontFamily: 'Poppins',
+                                    }}>
+                                    Shared Among:
+                                  </Typography>
+                                  <Tooltip title="Delete">
+                                    <img
+                                      src={InfIcon}
+                                      style={{ width: '16px' }}
+                                      alt="group"
+                                    />
+                                  </Tooltip>
+                                </Box>
                               </Box>
                             </Box>
-                          </Box>
-                        ))
-                      )}
-                    </AccordionDetails>
-                  </Accordion>
+                          ))
+                        )}
+                      </AccordionDetails>
+                    </Accordion>
+                  </Box>
                 </Box>
-              </Box>
-            ))
-          ) : (
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '55vh',
-                width: '100%',
-                flexDirection: 'column',
-              }}>
-              <img alt="notrip" style={{ width: '200px' }} src={NoData} />
-              <Typography
-                sx={{
-                  fontFamily: 'Poppins',
-                  fontSize: '20px',
-                  color: colors.black,
-                  textAlign: 'center',
-                  mt: '20px',
-                }}>
-                You have no ongoing trips
-              </Typography>
-            </Box>
-          )}
+              ))
+            : !isLoading && (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '55vh',
+                    width: '100%',
+                    flexDirection: 'column',
+                  }}>
+                  <img alt="notrip" style={{ width: '200px' }} src={NoData} />
+                  <Typography
+                    sx={{
+                      fontFamily: 'Poppins',
+                      fontSize: '20px',
+                      color: colors.black,
+                      textAlign: 'center',
+                      mt: '20px',
+                    }}>
+                    You have no trip history
+                  </Typography>
+                </Box>
+              )}
         </Box>
       </Box>
       <TripDetailsModal

@@ -121,7 +121,7 @@ const Friends = () => {
             }}
           />
         </Box>
-        {addedFriends?.length === 0 && (
+        {addedFriends?.length === 0 && !isLoading && (
           <Box
             sx={{
               display: 'flex',
