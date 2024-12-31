@@ -205,7 +205,13 @@ const Trips = () => {
                         justifyContent: 'space-between',
                         pb: '20px',
                       }}>
-                      <Typography sx={{ fontFamily: 'Poppins', width: '30%' }}>
+                      <Typography
+                        sx={{
+                          fontFamily: 'Poppins',
+                          width: 'auto',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}>
                         {item.name}
                       </Typography>
                       <Box>
@@ -372,7 +378,10 @@ const Trips = () => {
                                       }}>
                                       Shared Among:
                                     </Typography>
-                                    <Tooltip title="Delete">
+                                    <Tooltip
+                                      title={expense.sharedAmong.map((user) => (
+                                        <Box>{user.name}</Box>
+                                      ))}>
                                       <img
                                         src={InfIcon}
                                         style={{ width: '16px' }}

@@ -5,14 +5,14 @@ import Modal from '@mui/material/Modal'
 import CrossIcon from '../../assets/icons/crossIcon.svg'
 import MoneyIcon from '../../assets/icons/money.png'
 import CustomButton from '../../common/CustomButton'
-import { InputLabel, MenuItem } from '@mui/material'
+import { InputLabel } from '@mui/material'
 import { InputField } from '../../common/InputField'
 import axiosInstance from '../../utils/axios'
 import colors from '../../constants/colors'
 import { toastMessage } from '../../common/ToastMessage'
-import _, { set } from 'lodash'
+import _ from 'lodash'
 import SearchBoxSelect from '../../common/SearchBoxSelect'
-import { addExpenseApiUrl } from '../../utils/urls'
+import { addExpenseApiUrl, getCatgory } from '../../utils/urls'
 
 const style = {
   position: 'absolute',
@@ -110,6 +110,18 @@ export default function AddExpenseModal({
     } else {
       FormDetails[name] = value
     }
+    // if (name === 'title') {
+    //   axiosInstance
+    //     .post(getCatgory, {
+    //       description: 'paid for food and driks in xyz hotel',
+    //     })
+    //     .then((response) => {
+    //       console.log(response)
+    //     })
+    //     .catch((error) => {
+    //       console.log(error)
+    //     })
+    // }
     FormDetails.isValidForm = validateForm(FormDetails)
     setFormDetails(FormDetails)
   }

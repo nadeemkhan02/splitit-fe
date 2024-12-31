@@ -8,3 +8,4 @@ export const getTripListApiUrl = `${baseUrl}/api/trips`
 export const addExpenseApiUrl = `${baseUrl}/api/expenses/addExpense`
 export const updateFriend = `${baseUrl}/api/users/addFriend`
 export const completeTripApiUrl = `${baseUrl}/api/trips/completeTrip`
+export const getCatgory = `${baseUrl}/api/expenses/categorize-expense`
